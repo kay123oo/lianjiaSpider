@@ -11,7 +11,11 @@ class lianjiaSpider(RedisSpider):
     name = "lianjia_zufang"
     # start_urls = ['https://www.lianjia.com/city/']
     redis_key = 'lianjia_zufang:start_urls'
-    allowed_domains = ['lianjia.com']
+    allowed_domains = ['gz.lianjia.com'
+                       ,'bj.lianjia.com',
+                       'sz.lianjia.com',
+                       'sh.lianjia.com'
+                         ]
 
 
     def parse(self, response):
@@ -31,19 +35,24 @@ class lianjiaSpider(RedisSpider):
     def get_area_url(self, response):
         # 获取城区url
         area_url_list = response.xpath("//li[@data-type='district'][position()>1]/a/@href").extract()
-        for area_url in area_url_list:
+        area_name_list = response.xpath("//li[@data-type='district'][position()>1]/a/text()").extract()
+        for area_url ,area_name in zip(area_url_list ,area_name_list):
             area_url = re.findall(r"(.*)/zufang/", response.url)[0] + area_url
-            yield scrapy.Request(url=area_url, callback=self.get_business_url)
+            yield scrapy.Request(url=area_url, callback=self.get_business_url,meta={"area_name": area_name})
 
     def get_business_url(self, response):
         # 获取商圈url
+        area_name = response.meta["area_name"]
         business_url_list = response.xpath("//li[@data-type='bizcircle'][position()>1]/a/@href").extract()
-        for business_url in business_url_list:
+        business_name_list = response.xpath("//li[@data-type='bizcircle'][position()>1]/a/text()").extract()
+        for business_url, business_name in zip(business_url_list, business_name_list):
             business_url = re.findall(r"(.*)/zufang/", response.url)[0] + business_url
-
-            yield scrapy.Request(url=business_url, callback=self.get_page_url)
+            yield scrapy.Request(url=business_url, callback=self.get_page_url, meta={"business_name": business_name,
+                                                                                     "area_name":area_name})
 
     def get_page_url(self, response):
+        area_name = response.meta["area_name"]
+        business_name = response.meta["business_name"]
         # 获取最大页码
         max_page = response.xpath("//div[@class='content__pg']/@data-totalpage").extract()
         max_page = int(max_page[0]) if max_page else 0
@@ -52,25 +61,62 @@ class lianjiaSpider(RedisSpider):
         # ---------page=0时 不会执行下面----------
         for page in range(max_page):
             page_url = response.url + "pg{}/#contentList".format(page + 1)
-            yield scrapy.Request(url=page_url, callback=self.get_page_data)
+            yield scrapy.Request(url=page_url, callback=self.get_page_data, meta={"business_name": business_name,
+                                                                                  "area_name": area_name})
 
     def get_page_data(self, response):
+        print("get_page_data:")
+        area_name = response.meta["area_name"]
+        business_name = response.meta["business_name"]
+        #print(area_name)
+        #print(business_name)
         zufang_xml_list = response.xpath("//div[@class='content__list']/div")
         city = response.xpath("//*[@id='content']/div[1]/p/a[1]/text()").extract()[0]
         for zufang_xml in zufang_xml_list:
-            title = zufang_xml.xpath(".//p[@class='content__list--item--title twoline']/a/text()").extract()[0].strip()
-            price = zufang_xml.xpath(".//em/text()").extract()[0]
-            district = zufang_xml.xpath(".//p[@class='content__list--item--des']/a[1]/text()").extract()[0]
-            microdistrict = zufang_xml.xpath(".//p[@class='content__list--item--des']/a[2]/text()").extract()[0]
-            community = zufang_xml.xpath(".//p[@class='content__list--item--des']/a[3]/text()").extract()[0]
-            item = zufangItem()
-            item["title"] = title
-            item["price"] = price
-            item["district"] = district
-            item["microdistrict"] = microdistrict
-            item["community"] = community
-            item["city"] = city
+            try:
+                item = zufangItem()
+                title = zufang_xml.xpath(".//p[@class='content__list--item--title twoline']/a/text()").extract()[0].strip()
+                price = zufang_xml.xpath(".//em/text()").extract()[0]
+                dataDistributionType = zufang_xml.xpath(".//@data-distribution_type").extract()[0]
+
+                if dataDistributionType == '203500000002':
+                    print(int(dataDistributionType))
+                    item["district"] = area_name
+                    item["microdistrict"] = business_name
+                    item['dataDistributionType'] = 1
+                    if zufang_xml.xpath(".//span[@class='room__left']").extract():
+                        item["area"]= zufang_xml.xpath(".//p[@class='content__list--item--des']/text()[3]").extract()[0]
+                        item["houseType"] = zufang_xml.xpath(".//p[@class='content__list--item--des']/text()[5]").extract()[0]
+                    else:
+                        item["area"]  = zufang_xml.xpath(".//p[@class='content__list--item--des']/text()[1]").extract()[0]
+                        item["houseType"] = zufang_xml.xpath(".//p[@class='content__list--item--des']/text()[3]").extract()[0]
+                elif dataDistributionType == '203500000001':
+                    item['dataDistributionType'] = 0
+                    item["district"] = zufang_xml.xpath(".//p[@class='content__list--item--des']/a[1]/text()").extract()[0]
+                    item["microdistrict"] = zufang_xml.xpath(".//p[@class='content__list--item--des']/a[2]/text()").extract()[0]
+                    item["community"] = zufang_xml.xpath(".//p[@class='content__list--item--des']/a[3]/text()").extract()[0]
+                    item["area"] = zufang_xml.xpath(".//p[@class='content__list--item--des']/text()[5]").extract()[0].strip()
+                    item["orientation"] = zufang_xml.xpath(".//p[@class='content__list--item--des']/text()[6]").extract()[0].strip()
+                    item["houseType"] = zufang_xml.xpath(".//p[@class='content__list--item--des']/text()[7]").extract()[0].strip()
+                tags_xml = zufang_xml.xpath(".//p[@class='content__list--item--bottom oneline']/i/text()").extract()
+                tags =[]
+                if(tags_xml):
+                    for tag in tags_xml:
+                        tags.append(tag)
+                    item['tags'] = tags
+                item["title"] = title
+                item["price"] = price
+                item["city"] = city
+            except Exception as e:
+                print(e)
             yield item
+
+
+    def get_item_detail(self,response):
+        item = response.meta["data"]
+        # 方式 //*[@id="aside"]/ul/li[1]/text()
+        # 房屋类型 //*[@id="aside"]/ul/li[2]/text()
+        #朝向，楼层 //*[@id="aside"]/ul/li[3]/text()
 
 
 
