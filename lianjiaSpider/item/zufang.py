@@ -38,5 +38,6 @@ class zufangItem(Item):
     latitude = Field()
     # 距离地铁站距离
     distance = Field()
-
+    # 楼层
+    floor = Field()
 

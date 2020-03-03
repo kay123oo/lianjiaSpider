@@ -9,14 +9,12 @@ from lianjiaSpider.settings import DEFAULT_REQUEST_HEADERS
 
 class lianjiaSpider(RedisSpider):
     name = "lianjia_zufang"
-    # start_urls = ['https://www.lianjia.com/city/']
     redis_key = 'lianjia_zufang:start_urls'
     allowed_domains = ['gz.lianjia.com',
                        'bj.lianjia.com',
                        'sz.lianjia.com',
                        'sh.lianjia.com'
                        ]
-
 
     def parse(self, response):
         # 获取城市
@@ -118,9 +116,10 @@ class lianjiaSpider(RedisSpider):
             lon_lat_str = response.xpath("//*[@class='map__cur']/@data-coord").extract()[0]
             pa_lon = r"\"longitude\":\"(.*)\","
             pa_lat = r"\"longitude\":\"(.*)\","
-            item['longitude'] = re.findall(pa_lon,lon_lat_str)[0]
-            item['latitude'] = re.findall(pa_lat,lon_lat_str)[0]
+            item['longitude'] = re.findall(pa_lon, lon_lat_str)[0]
+            item['latitude'] = re.findall(pa_lat, lon_lat_str)[0]
             distance = response.xpath("//*[@class='map--overlay__list--title']/span").extract()
+            item['floor'] = response.xpath("//div[@class='content__article__info']/ul/li[8]/text()").extract()
             if len(distance) > 0:
                 item['distance']= distance[0]
             else:

@@ -9,7 +9,6 @@ from lianjiaSpider import settings
 from .item.zufang import zufangItem
 import re
 from lianjiaSpider.zone.city import cities
-import math
 
 
 class LianjiaspiderPipeline(object):
@@ -36,17 +35,27 @@ class LianjiaspiderPipeline(object):
     def process_item(self, item, spider):
         if isinstance(item, zufangItem):
             try:
+                # 清理房屋面积数据 去掉单位
                 area = re.findall(r'(\w*[0-9]+)\w*',item['area'])
                 if area:
                     item['area'] = int(area[0])
+
+                # 部分租金为区域 取其平均数
                 if '-' in item['price']:
                     index = str(item['price']).index('-')
-                    min = str(item['price'])[:index]
-                    max = str(item['price'])[index+1:]
-                    item['price'] = math.floor((int(min)+int(max))/2)
+                    min_price = str(item['price'])[:index]
+                    max_price = str(item['price'])[index+1:]
+                    item['price'] = int((int(min_price)+int(max_price))/2)
                 else:
-                    item['price']=int(item['price'])
+                    item['price'] = int(item['price'])
+
+                # 清理户型数据
                 item['houseType'] = str(item['houseType']).strip().strip('\n')
+                item['hall_num'] = item['houseType'][0]
+                item['bedroom_num'] = item['houseType'][2]
+                item['bathroom_num'] = item['houseType'][4]
+
+                # 存入数据库
                 info = dict(item)
                 doc_name = "zufang_"+(cities[item['city']])
                 self.post = self.tdb[doc_name]
