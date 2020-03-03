@@ -11,11 +11,11 @@ class lianjiaSpider(RedisSpider):
     name = "lianjia_zufang"
     # start_urls = ['https://www.lianjia.com/city/']
     redis_key = 'lianjia_zufang:start_urls'
-    allowed_domains = ['gz.lianjia.com'
-                       ,'bj.lianjia.com',
+    allowed_domains = ['gz.lianjia.com',
+                       'bj.lianjia.com',
                        'sz.lianjia.com',
                        'sh.lianjia.com'
-                         ]
+                       ]
 
 
     def parse(self, response):
@@ -65,11 +65,8 @@ class lianjiaSpider(RedisSpider):
                                                                                   "area_name": area_name})
 
     def get_page_data(self, response):
-        print("get_page_data:")
         area_name = response.meta["area_name"]
         business_name = response.meta["business_name"]
-        #print(area_name)
-        #print(business_name)
         zufang_xml_list = response.xpath("//div[@class='content__list']/div")
         city = response.xpath("//*[@id='content']/div[1]/p/a[1]/text()").extract()[0]
         for zufang_xml in zufang_xml_list:
@@ -78,6 +75,9 @@ class lianjiaSpider(RedisSpider):
                 title = zufang_xml.xpath(".//p[@class='content__list--item--title twoline']/a/text()").extract()[0].strip()
                 price = zufang_xml.xpath(".//em/text()").extract()[0]
                 dataDistributionType = zufang_xml.xpath(".//@data-distribution_type").extract()[0]
+                # 获取详情页
+                detail_url =zufang_xml.xpath(".//p[@class='content__list--item--title twoline']/a/@href").extract()[0]
+                detail_url = "https://bj.lianjia.com" + detail_url
 
                 if dataDistributionType == '203500000002':
                     print(int(dataDistributionType))
@@ -109,14 +109,31 @@ class lianjiaSpider(RedisSpider):
                 item["city"] = city
             except Exception as e:
                 print(e)
-            yield item
+                yield scrapy.Request(url=detail_url, callback=self.get_item_detail, meta={"data": item},
+                                     dont_filter=True)
 
-
-    def get_item_detail(self,response):
+    def get_item_detail(self, response):
         item = response.meta["data"]
-        # 方式 //*[@id="aside"]/ul/li[1]/text()
-        # 房屋类型 //*[@id="aside"]/ul/li[2]/text()
-        #朝向，楼层 //*[@id="aside"]/ul/li[3]/text()
+        try:
+            lon_lat_str = response.xpath("//*[@class='map__cur']/@data-coord").extract()[0]
+            pa_lon = r"\"longitude\":\"(.*)\","
+            pa_lat = r"\"longitude\":\"(.*)\","
+            item['longitude'] = re.findall(pa_lon,lon_lat_str)[0]
+            item['latitude'] = re.findall(pa_lat,lon_lat_str)[0]
+            distance = response.xpath("//*[@class='map--overlay__list--title']/span").extract()
+            if len(distance) > 0:
+                item['distance']= distance[0]
+            else:
+                item['distance']= None
+        except Exception as e:
+            print(e)
+            item['longitude'] = None
+            item['latitude'] = None
+            item['distance'] = None
+        yield item
+
+
+
 
 
 

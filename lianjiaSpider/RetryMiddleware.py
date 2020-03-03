@@ -20,8 +20,6 @@ class Process_Proxies(RetryMiddleware):
         return response
 
     def process_exception(self, request, exception, spider):
-        print("失效代理")
-        print(exception)
         if isinstance(exception, self.EXCEPTIONS_TO_RETRY) \
                 and not request.meta.get('dont_retry', False):
             # 删除该代理
