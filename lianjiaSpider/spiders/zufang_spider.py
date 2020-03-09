@@ -10,9 +10,9 @@ from lianjiaSpider.settings import DEFAULT_REQUEST_HEADERS
 class lianjiaSpider(RedisSpider):
     name = "lianjia_zufang"
     redis_key = 'lianjia_zufang:start_urls'
-    allowed_domains = [#'gz.lianjia.com'
-                       #'bj.lianjia.com',
-                       #'sz.lianjia.com',
+    allowed_domains = ['gz.lianjia.com'
+                       'bj.lianjia.com',
+                       'sz.lianjia.com',
                        'sh.lianjia.com'
                        ]
 
@@ -70,6 +70,7 @@ class lianjiaSpider(RedisSpider):
         for zufang_xml in zufang_xml_list:
             try:
                 item = zufangItem()
+                img = zufang_xml.xpath(".//a[@class='content__list--item--aside']/img/@data-src").extract()[0]
                 title = zufang_xml.xpath(".//p[@class='content__list--item--title twoline']/a/text()").extract()[0].strip()
                 price = zufang_xml.xpath(".//em/text()").extract()[0]
                 dataDistributionType = zufang_xml.xpath(".//@data-distribution_type").extract()[0]
@@ -105,6 +106,7 @@ class lianjiaSpider(RedisSpider):
                 item["title"] = title
                 item["price"] = price
                 item["city"] = city
+                item['img'] = img
             except Exception as e:
                 print(response.url)
                 print("爬取出错")
@@ -114,41 +116,15 @@ class lianjiaSpider(RedisSpider):
 
     def get_item_detail(self, response):
         item = response.meta["data"]
-        print("get_item_detail::")
-        print(response.url)
-        #try:
-        #    lon_lat_str = response.xpath(".//*[@class='map__cur']/@data-coord/text()").extract()
-        #    if  lon_lat_str:
-        #        lon_lat_str=lon_lat_str[0]
-        #    else:
-        #        print("为空")
-        #    print("lon_lat_str::")
-        #    print(lon_lat_str)
-        #    pa_lon = r"\"longitude\":\"(.*)\","
-        #    pa_lat = r"\"longitude\":\"(.*)\","
-        #    print(re.findall(pa_lon, lon_lat_str)[0])
-        #    print(re.findall(pa_lat, lon_lat_str)[0])
-        #    item['longitude'] = re.findall(pa_lon, lon_lat_str)[0]
-        #    item['latitude'] = re.findall(pa_lat, lon_lat_str)[0]
-        #    distance = response.xpath(".//*[@class='map--overlay__list--title']/span").extract()
-        #    item['floor'] = response.xpath(".//div[@class='content__article__info']/ul/li[8]/text()").extract()
-        #    if len(distance) > 0:
-        #        item['distance'] = distance[0]
-        #    else:
-        #        item['distance'] = None
-        #except Exception as e:
-        #    print(e)
-        #    item['longitude'] = None
-        #    item['latitude'] = None
-        #    item['distance'] = None
-        #print(response.text)
+        item['detail_url'] = response.url
         pa_lon = r"longitude: '(.*)',"
         pa_lat = r"latitude: '(.*)'"
-        pa_distance = r"<span class=\"fr\">(\d*)米</span>"
         item['longitude'] = re.findall(pa_lon, response.text)[0]
         item['latitude'] = re.findall(pa_lat, response.text)[0]
         distance = response.xpath("//*[@id='around']/ul[2]/li[1]/span[2]/text()").extract()
-        item['floor'] = response.xpath(".//div[@class='content__article__info']/ul/li[8]/text()").extract()[0]
+        floor = response.xpath(".//div[@class='content__article__info']/ul/li[8]/text()").extract()
+        if floor:
+            item['floor'] = floor[0]
         if distance :
             item['distance'] = distance[0]
         else:
