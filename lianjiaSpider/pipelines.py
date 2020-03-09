@@ -51,13 +51,22 @@ class LianjiaspiderPipeline(object):
 
                 # 清理户型数据
                 item['houseType'] = str(item['houseType']).strip().strip('\n')
-                item['hall_num'] = item['houseType'][0]
-                item['bedroom_num'] = item['houseType'][2]
-                item['bathroom_num'] = item['houseType'][4]
+                item['hall_num'] = int(item['houseType'][0])
+                item['bedroom_num'] = int(item['houseType'][2])
+                item['bathroom_num'] = int(item['houseType'][4])
+
+                if item['distance']:
+                    item['distance'] = re.findall(r'(\w*[0-9]+)\w*',item['distance'])[0]
+                    item['distance'] = int(item['distance'])
+
+                item['floor'] = re.findall(r'(\w*[0-9]+)\w*', item['floor'])[0]
+                item['floor'] = int(item['floor'])
+
 
                 # 存入数据库
                 info = dict(item)
                 doc_name = "zufang_"+(cities[item['city']])
+                #doc_name = "Test5"
                 self.post = self.tdb[doc_name]
                 if self.post.insert(info):
                     print('成功插入一条数据')

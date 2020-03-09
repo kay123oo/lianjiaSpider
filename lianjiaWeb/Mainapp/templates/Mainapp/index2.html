@@ -1,0 +1,417 @@
+<html>
+<head>
+
+  <title>广州租房信息</title>
+  
+    <!-- 是否需要加载common.css -->
+  <link rel="stylesheet" href="../../static/Mainapp/css/common.css">
+
+    <!-- 载入后台返回的css文件 -->
+  <link rel="stylesheet" href="../../static/Mainapp/css/index3.css">
+
+      <!-- 载入链家相关皮肤 -->
+    <link rel="stylesheet" href="../../static/Mainapp/css/lianjia.css">
+  
+</head>
+
+<body>
+
+
+  <div class="wrapper">
+     <link href='//s1.ljcdn.com/feroot/pc/asset/lianjiaIM/css/lianjiaim.css?v=15212312340214' property='stylesheet' rel="stylesheet">
+
+<div>
+
+
+  <!-- 搜索房源sug -->
+  <div class="search w1150" id="search">
+  <!-- <a class="search__logo" href="/"></a> -->
+  <div class="search__wrap">
+    <input class="search__input fl" type="text" data-el="input" placeholder="请输入区域、商圈或小区名开始找房" autocomplete="off" value="" data-value="">
+    <span class="search__button fl" data-el="button"></span>
+  </div>
+
+</div>  </div>
+
+  <!-- 列表页面包屑 -->
+  <div class="bread__nav w1150 ">
+  <p class="bread__nav__wrapper oneline">
+                  <a href="https://gz.lianjia.com/">广州链家网</a>&nbsp;&gt;&nbsp;
+                      <h1>
+        <a href="https://gz.lianjia.com/zufang/">广州租房</a>
+      </h1>
+            </p>
+</div>
+
+  <!-- 筛选项 -->
+  <div class="filter">
+  <div class="filter__wrapper w1150" id="filter">
+    <ul class="filter__item--noaside">
+      <li class="filter__item--level1 down strong" data-tab="1" data-el="area" data-antitarget="station"><a href="/zufang/" onclick="return false;">按区域</a></li>
+          <li class="filter__item--level1 " data-tab="1" data-el="station" data-antitarget="area"><a href="/zufang/" onclick="return false;">按地铁线</a></li>
+        </ul>
+
+          <ul data-target="area" class="">
+              <li data-id="0" data-type="district" class="filter__item--level2 filter__item--aside strong">
+          <a href="/zufang/"  rel="nofollow">不限</a>
+
+        </li>
+              {% for district in districts %}
+              <li data-id="23008636" data-type="district" class="filter__item--level2  ">
+          <a href="{% url 'group_by_district' district=district %}"  >{{district}}</a>
+            {% endfor %}
+        </li>
+            </ul>
+            <ul data-target="area">
+            <li data-id="0" data-type="bizcircle" class="filter__item--level3 filter__item--aside strong">
+              <a href="">不限</a>
+            </li>
+                {% for microdistrict in microdistricts %}                <li data-id="612100024" data-type="bizcircle" class="filter__item--level3  ">
+              <a href="{% url 'group_by_bizcircle' bizcircle=microdistrict %}">{{microdistrict}}</a>
+                {% endfor %}
+            </li>
+                        </ul>
+
+    
+          <ul class="filter__ul" data-el="rentType">
+          <li class="filter__item--level4 filter__item--aside"><a href="javascript:;">方式</a></li>
+                  <li data-id="0" class="filter__item--level4 strong">
+            <a href="/zufang/" rel="nofollow" >不限</a>
+          </li>
+                  <li data-id="200600000001" class="filter__item--level4 ">
+            <a href="/zufang/rt200600000001/"  >整租</a>
+          </li>
+                  <li data-id="200600000002" class="filter__item--level4 ">
+            <a href="/zufang/rt200600000002/"  >合租</a>
+          </li>
+              </ul>
+    
+    
+          <ul class="filter__ul" data-el="filterPrice">
+          <li class="filter__item--level5 filter__item--aside"><a href="javascript:;">租金</a></li>
+                  <li class="filter__item--level5 check ">
+            <a href="/zufang/rp1/">≤1000元</a>
+          </li>
+                  <li class="filter__item--level5 check ">
+            <a href="/zufang/rp2/">1000-1500元</a>
+          </li>
+                  <li class="filter__item--level5 check ">
+            <a href="/zufang/rp3/">1500-2000元</a>
+          </li>
+                  <li class="filter__item--level5 check ">
+            <a href="/zufang/rp4/">2000-2500元</a>
+          </li>
+                  <li class="filter__item--level5 check ">
+            <a href="/zufang/rp5/">2500-3000元</a>
+          </li>
+                  <li class="filter__item--level5 check ">
+            <a href="/zufang/rp6/">3000-5000元</a>
+          </li>
+                  <li class="filter__item--level5 check ">
+            <a href="/zufang/rp7/">≥5000元</a>
+          </li>
+                  <li class="filter__item--input" data-url="/zufang/brp{min}erp{max}/"><input type="text" data-el="input_start" value="">-<input data-el="input_end" type="text" value="">元<span class="filter__button" data-el="button"></span></li>
+      </ul>
+    
+          <ul class="filter__ul">
+          <li class="filter__item--level5 filter__item--aside"><a href="javascript:;">户型</a></li>
+                  <li class="filter__item--level5 check ">
+            <a href="/zufang/l0/">一居</a>
+          </li>
+                  <li class="filter__item--level5 check ">
+            <a href="/zufang/l1/">两居</a>
+          </li>
+                  <li class="filter__item--level5 check ">
+            <a href="/zufang/l2/">三居</a>
+          </li>
+                  <li class="filter__item--level5 check ">
+            <a href="/zufang/l3/">四居+</a>
+          </li>
+              </ul>
+    
+    
+          <ul class="filter__ul ">
+          <li class="filter__item--level5 filter__item--aside"><a href="javascript:;">朝向</a></li>
+                  <li class="filter__item--level5 check ">
+            <a rel="nofollow" href="/zufang/f100500000001/">东</a>
+          </li>
+                  <li class="filter__item--level5 check ">
+            <a rel="nofollow" href="/zufang/f100500000005/">西</a>
+          </li>
+                  <li class="filter__item--level5 check ">
+            <a rel="nofollow" href="/zufang/f100500000003/">南</a>
+          </li>
+                  <li class="filter__item--level5 check ">
+            <a rel="nofollow" href="/zufang/f100500000007/">北</a>
+          </li>
+                  <li class="filter__item--level5 check ">
+            <a rel="nofollow" href="/zufang/f100500000009/">南北</a>
+          </li>
+              </ul>
+
+
+    
+          <ul class="filter__ul">
+          <li class="filter__item--level5 filter__item--aside"><a href="javascript:;">楼层</a></li>
+                  <li class="filter__item--level5 check ">
+            <a rel="nofollow" href="/zufang/lc200500000003/">低楼层</a>
+          </li>
+                  <li class="filter__item--level5 check ">
+            <a rel="nofollow" href="/zufang/lc200500000002/">中楼层</a>
+          </li>
+                  <li class="filter__item--level5 check ">
+            <a rel="nofollow" href="/zufang/lc200500000001/">高楼层</a>
+          </li>
+              </ul>
+    
+          <ul class="filter__ul">
+          <li class="filter__item--level5 filter__item--aside"><a href="javascript:;">电梯</a></li>
+                  <li class="filter__item--level5 check ">
+            <a rel="nofollow" href="/zufang/ie0/">无电梯</a>
+          </li>
+                  <li class="filter__item--level5 check ">
+            <a rel="nofollow" href="/zufang/ie1/">有电梯</a>
+          </li>
+              </ul>
+      </div>
+</div>
+
+  <!-- 房源列表相关信息 -->
+  <div class="content w1150" id="content">
+    <div class="content__article">
+
+      <!-- 搜索结果信息 -->
+      <p class="content__title">
+      已为您找到 <span class="content__title--hl">{{total_count}}</span> 套 <a href="https://gz.lianjia.com/zufang/" target="_blank" style="text-decoration:none;color:black">广州租房</a>
+    <span class="content__title--aside"><a href="/zufang/" id="clearUrl">清空条件</a></span>
+</p>
+
+      <!-- 搜索结果排序模块 -->
+      <ul class="content__filter" id="contentList">
+            <li data-event_id="10800" data-event_action="search_condition=/zufang/" class='content__filter--selected'>
+        <a href="/zufang/" 
+           data-event_id="10797" 
+           data-event_action="target=综合排序"
+           data-event_position="target">综合排序</a>
+      </li>
+                <li data-event_id="10800" data-event_action="search_condition=/zufang/rco11/" >
+        <a href="/zufang/rco11/" 
+           data-event_id="10797" 
+           data-event_action="target=最新上架"
+           data-event_position="target">最新上架</a>
+      </li>
+                                                              <li data-event_id="10800" 
+          data-event_action="search_condition=/zufang/rco21/" 
+          class=' '>
+
+                  <a href="/zufang/rco21/" 
+             data-event_id="10797" 
+             data-event_action="target=价格"
+             data-event_position="target"
+             >价格</a>
+              </li>
+                                                              <li data-event_id="10800" 
+          data-event_action="search_condition=/zufang/rco31/" 
+          class=' '>
+
+                  <a href="/zufang/rco31/" 
+             data-event_id="10797" 
+             data-event_action="target=面积"
+             data-event_position="target"
+             >面积</a>
+              </li>
+        </ul>
+
+      <!-- 小区吊顶模块 -->
+      
+      
+        <!-- 有结果时，房源列表 -->
+        <div class="content__list">{% for contact in contacts %}
+
+
+          <div
+  class="content__list--item"
+  data-el="listItem"
+  data-house_code="GZ2386859670267494400"
+  data-brand_code="200301001000"
+  data-ad_code=""
+  data-c_type="1"
+  data-position="0"
+  data-total="68086"
+  data-fb_expo_id="289404460763873281"
+  data-t="default"
+  data-strategy_id=""
+  data-click_position="0"
+  data-ad_type="0"
+  data-distribution_type="203500000001"
+  >
+    <a
+      class="content__list--item--aside" target="_blank"      href="/zufang/GZ2386859670267494400.html"
+      title="整租·丽景雅庭 2室1厅 南">
+        <img
+          alt="整租·丽景雅庭 2室1厅 南_丽景雅庭租房"
+          src="https://s1.ljcdn.com/matrix_pc/dist/pc/src/resource/default/250-182.png?_v=202003051154336b2"
+          data-src="https://image1.ljcdn.com/440100-inspection/83f18b23-a7e2-423e-992a-8d885d216ba2.jpg.250x182.jpg"
+          class="lazyload">
+        <!-- 是否展示vr图片 -->
+                <!-- 广告标签 -->
+            </a>
+    <div class="content__list--item--main">
+      <p class="content__list--item--title twoline">
+        <a target="_blank" href="/zufang/GZ2386859670267494400.html">
+            {{ contact.title }}        </a>
+      </p>
+      <p class="content__list--item--des">
+        <a target="_blank" href="/zufang/baiyun/">{{ contact.district }}</a>-<a href="/zufang/tonghe1/" target="_blank">{{ contact.microdistrict }}</a>-<a title="丽景雅庭" href="/zufang/c2111103319264/" target="_blank">{{ contact.community }}</a>
+        <i>/</i>
+        {{ contact.area }}㎡
+        <i>/</i>{{ contact.orientation }}        <i>/</i>
+        {{ contact.houseTpye }}        <span class="hide">
+          <i>/</i>
+          {{ contact.floor }}  层
+                  </span>
+      </p>
+      <p class="content__list--item--bottom oneline">{% for tag in contact.tags %}
+            <i class="content__item__tag--is_subway_house">{{ tag }}</i>
+          {% endfor %}
+            </p>
+      <span class="content__list--item-price"><em>{{ contact.price }}</em> 元/月</span>
+    </div>
+
+</div>
+        
+{% endfor %}
+</div>
+
+        <!-- 列表分页模块 -->
+        <div class="content__pg" data-el="page_navigation" data-url="/zufang/pg{page}/" data-totalPage=100 data-curPage=1>
+        </div>
+
+        <ul style="display:hidden">
+                      <li><a href="/zufang/pg2/"></a></li>
+                      <li><a href="/zufang/pg3/"></a></li>
+                      <li><a href="/zufang/pg4/"></a></li>
+                      <li><a href="/zufang/pg5/"></a></li>
+                      <li><a href="/zufang/pg6/"></a></li>
+                      <li><a href="/zufang/pg7/"></a></li>
+                      <li><a href="/zufang/pg8/"></a></li>
+                      <li><a href="/zufang/pg9/"></a></li>
+                      <li><a href="/zufang/pg10/"></a></li>
+                      <li><a href="/zufang/pg11/"></a></li>
+                      <li><a href="/zufang/pg12/"></a></li>
+                      <li><a href="/zufang/pg13/"></a></li>
+                      <li><a href="/zufang/pg14/"></a></li>
+                      <li><a href="/zufang/pg15/"></a></li>
+                      <li><a href="/zufang/pg16/"></a></li>
+                      <li><a href="/zufang/pg17/"></a></li>
+                      <li><a href="/zufang/pg18/"></a></li>
+                      <li><a href="/zufang/pg19/"></a></li>
+                      <li><a href="/zufang/pg20/"></a></li>
+                      <li><a href="/zufang/pg21/"></a></li>
+                      <li><a href="/zufang/pg22/"></a></li>
+                      <li><a href="/zufang/pg23/"></a></li>
+                      <li><a href="/zufang/pg24/"></a></li>
+                      <li><a href="/zufang/pg25/"></a></li>
+                      <li><a href="/zufang/pg26/"></a></li>
+                      <li><a href="/zufang/pg27/"></a></li>
+                      <li><a href="/zufang/pg28/"></a></li>
+                      <li><a href="/zufang/pg29/"></a></li>
+                      <li><a href="/zufang/pg30/"></a></li>
+                      <li><a href="/zufang/pg31/"></a></li>
+                      <li><a href="/zufang/pg32/"></a></li>
+                      <li><a href="/zufang/pg33/"></a></li>
+                      <li><a href="/zufang/pg34/"></a></li>
+                      <li><a href="/zufang/pg35/"></a></li>
+                      <li><a href="/zufang/pg36/"></a></li>
+                      <li><a href="/zufang/pg37/"></a></li>
+                      <li><a href="/zufang/pg38/"></a></li>
+                      <li><a href="/zufang/pg39/"></a></li>
+                      <li><a href="/zufang/pg40/"></a></li>
+                      <li><a href="/zufang/pg41/"></a></li>
+                      <li><a href="/zufang/pg42/"></a></li>
+                      <li><a href="/zufang/pg43/"></a></li>
+                      <li><a href="/zufang/pg44/"></a></li>
+                      <li><a href="/zufang/pg45/"></a></li>
+                      <li><a href="/zufang/pg46/"></a></li>
+                      <li><a href="/zufang/pg47/"></a></li>
+                      <li><a href="/zufang/pg48/"></a></li>
+                      <li><a href="/zufang/pg49/"></a></li>
+                      <li><a href="/zufang/pg50/"></a></li>
+                      <li><a href="/zufang/pg51/"></a></li>
+                      <li><a href="/zufang/pg52/"></a></li>
+                      <li><a href="/zufang/pg53/"></a></li>
+                      <li><a href="/zufang/pg54/"></a></li>
+                      <li><a href="/zufang/pg55/"></a></li>
+                      <li><a href="/zufang/pg56/"></a></li>
+                      <li><a href="/zufang/pg57/"></a></li>
+                      <li><a href="/zufang/pg58/"></a></li>
+                      <li><a href="/zufang/pg59/"></a></li>
+                      <li><a href="/zufang/pg60/"></a></li>
+                      <li><a href="/zufang/pg61/"></a></li>
+                      <li><a href="/zufang/pg62/"></a></li>
+                      <li><a href="/zufang/pg63/"></a></li>
+                      <li><a href="/zufang/pg64/"></a></li>
+                      <li><a href="/zufang/pg65/"></a></li>
+                      <li><a href="/zufang/pg66/"></a></li>
+                      <li><a href="/zufang/pg67/"></a></li>
+                      <li><a href="/zufang/pg68/"></a></li>
+                      <li><a href="/zufang/pg69/"></a></li>
+                      <li><a href="/zufang/pg70/"></a></li>
+                      <li><a href="/zufang/pg71/"></a></li>
+                      <li><a href="/zufang/pg72/"></a></li>
+                      <li><a href="/zufang/pg73/"></a></li>
+                      <li><a href="/zufang/pg74/"></a></li>
+                      <li><a href="/zufang/pg75/"></a></li>
+                      <li><a href="/zufang/pg76/"></a></li>
+                      <li><a href="/zufang/pg77/"></a></li>
+                      <li><a href="/zufang/pg78/"></a></li>
+                      <li><a href="/zufang/pg79/"></a></li>
+                      <li><a href="/zufang/pg80/"></a></li>
+                      <li><a href="/zufang/pg81/"></a></li>
+                      <li><a href="/zufang/pg82/"></a></li>
+                      <li><a href="/zufang/pg83/"></a></li>
+                      <li><a href="/zufang/pg84/"></a></li>
+                      <li><a href="/zufang/pg85/"></a></li>
+                      <li><a href="/zufang/pg86/"></a></li>
+                      <li><a href="/zufang/pg87/"></a></li>
+                      <li><a href="/zufang/pg88/"></a></li>
+                      <li><a href="/zufang/pg89/"></a></li>
+                      <li><a href="/zufang/pg90/"></a></li>
+                      <li><a href="/zufang/pg91/"></a></li>
+                      <li><a href="/zufang/pg92/"></a></li>
+                      <li><a href="/zufang/pg93/"></a></li>
+                      <li><a href="/zufang/pg94/"></a></li>
+                      <li><a href="/zufang/pg95/"></a></li>
+                      <li><a href="/zufang/pg96/"></a></li>
+                      <li><a href="/zufang/pg97/"></a></li>
+                      <li><a href="/zufang/pg98/"></a></li>
+                      <li><a href="/zufang/pg99/"></a></li>
+                      <li><a href="/zufang/pg100/"></a></li>
+                  </ul>
+
+      
+          </div>
+
+    
+  </div>
+
+</div>
+{# 分页标签的HTML代码 #}
+<div class="pagination">
+    <span class="step-links">
+        {% if contacts.has_previous %}
+            <a href="?page={{ contacts.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ contacts.number }} of {{ contacts.paginator.num_pages }}.
+        </span>
+
+        {% if contacts.has_next %}
+            <a href="?page={{ contacts.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+</body>
+
+</html>

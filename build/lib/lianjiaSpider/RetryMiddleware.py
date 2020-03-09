@@ -14,6 +14,9 @@ class Process_Proxies(RetryMiddleware):
             return response
         if response.status in self.retry_http_codes:
             reason = response_status_message(response.status)
+            print(reason)
+            print("代理：")
+            print(request.meta.get('proxy', False))
             # 删除代理
             self.delete_proxy(request.meta.get('proxy', False))
             return self._retry(request, reason, spider) or response

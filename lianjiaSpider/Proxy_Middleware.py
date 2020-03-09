@@ -1,7 +1,10 @@
 import random
+
+from scrapy.downloadermiddlewares.httpproxy import HttpProxyMiddleware
+
 from lianjiaSpider.ipprocy.db.DataStore import sqlhelper
 
-class ProxyMiddleware():
+class ProxyMiddleware(HttpProxyMiddleware):
     global count
     count = 1
     global ips
@@ -20,13 +23,19 @@ class ProxyMiddleware():
             pass
         try:
             num = random.randint(0, len(ips))
-            if ips[num][2] == 1:
-                ress = 'https://' + ips[num][0] +":"+ ips[num][1]
+            if len(ips[num]) ==3:
+                if ips[num][2] == 1:
+                    ress = 'https://' + ips[num][0] +":"+ ips[num][1]
+                else:
+                    ress = 'http://' + ips[num][0] +":"+ ips[num][1]
             else:
-                ress = 'http://' + ips[num][0] +":"+ ips[num][1]
+                print("更换代理中间件：")
+                print(len(ips[num]))
         except BaseException as e:
+            print("更换代理exception：：")
             print(e)
             pass
         else:
             request.meta['proxy'] = str(ress)
+            print(ress)
             count += 1

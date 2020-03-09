@@ -184,7 +184,7 @@ def get_header():
         'Accept-Encoding': 'gzip, deflate',
     }
 #默认给抓取的ip分配20分,每次连接失败,减一分,直到分数全部扣完从数据库中删除
-DEFAULT_SCORE=10
+DEFAULT_SCORE=5
 
 TEST_URL = 'http://ip.chinaz.com/getip.aspx'
 TEST_IP = 'http://httpbin.org/ip'
