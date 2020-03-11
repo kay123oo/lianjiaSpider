@@ -2,6 +2,7 @@ from lianjiaSpider.item.zufang import zufangItem
 import scrapy
 import re
 from scrapy import Request
+import redis
 from lianjiaSpider.zone.city import cities
 from scrapy_redis.spiders import RedisSpider
 from lianjiaSpider.utils.InsertRedis import inserintota,inserintotc
@@ -15,6 +16,10 @@ class lianjiaSpider(RedisSpider):
                        'sz.lianjia.com',
                        'sh.lianjia.com'
                        ]
+
+    def open_spider(self, spider):
+        redis_conn = redis.Redis(host='127.0.0.1', port= 6379,db=5)
+        redis_conn.lpush('lianjia_zufang:start_urls', 'https://www.lianjia.com/city/')
 
     def parse(self, response):
         # 获取城市

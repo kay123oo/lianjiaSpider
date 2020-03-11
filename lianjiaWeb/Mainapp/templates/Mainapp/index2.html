@@ -192,19 +192,14 @@
         <a href="/zufang/" 
            data-event_id="10797" 
            data-event_action="target=综合排序"
-           data-event_position="target">综合排序</a>
+           data-event_position="target">默认排序</a>
       </li>
-                <li data-event_id="10800" data-event_action="search_condition=/zufang/rco11/" >
-        <a href="/zufang/rco11/" 
-           data-event_id="10797" 
-           data-event_action="target=最新上架"
-           data-event_position="target">最新上架</a>
-      </li>
+
                                                               <li data-event_id="10800" 
           data-event_action="search_condition=/zufang/rco21/" 
           class=' '>
 
-                  <a href="/zufang/rco21/" 
+                  <a href="{% url 'sort_by_price' district=current_district,biz}"
              data-event_id="10797" 
              data-event_action="target=价格"
              data-event_position="target"

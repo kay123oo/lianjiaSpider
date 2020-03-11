@@ -1,4 +1,4 @@
-FROM python:3.7
+FROM python:3
 ENV PATH /usr/local/bin:$PATH
 ADD . /code
 WORKDIR /code

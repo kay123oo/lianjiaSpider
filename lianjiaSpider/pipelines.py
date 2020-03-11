@@ -12,14 +12,14 @@ from lianjiaSpider.zone.city import cities
 
 
 class LianjiaspiderPipeline(object):
-    def __init__(self,host,port,zufang_db):
+    def __init__(self,host,port,zufang_db,post):
         self.host = host
         self.port = port
         self.db_name = zufang_db
         # 链接数据库
         client = pymongo.MongoClient(host=self.host,port=self.port)
         self.tdb = client[self.db_name]
-        #self.post = self.tdb[post]
+        self.post = self.tdb[post]
 
     @classmethod
     def from_crawler(cls, crawler):
@@ -27,7 +27,7 @@ class LianjiaspiderPipeline(object):
             host = crawler.settings.get('MONGODB_HOST'),
             port = crawler.settings.get('MONGODB_PORT'),
             zufang_db = crawler.settings.get('MONGODB_DBNAME'),
-            #post = crawler.settings.get('MONGODB_DOCNAME'),
+            post = crawler.settings.get('MONGODB_DOCNAME'),
 
 
         )
@@ -65,9 +65,6 @@ class LianjiaspiderPipeline(object):
 
                 # 存入数据库
                 info = dict(item)
-                doc_name = "zufang_"+(cities[item['city']])
-                #doc_name = "Test5"
-                self.post = self.tdb[doc_name]
                 if self.post.insert(info):
                     print('成功插入一条数据')
                 else:

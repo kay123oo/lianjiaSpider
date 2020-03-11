@@ -24,18 +24,16 @@ class ProxyMiddleware(HttpProxyMiddleware):
         try:
             num = random.randint(0, len(ips))
             if len(ips[num]) ==3:
-                if ips[num][2] == 1:
+                if int(ips[num][2]) == 1:
                     ress = 'https://' + ips[num][0] +":"+ ips[num][1]
                 else:
                     ress = 'http://' + ips[num][0] +":"+ ips[num][1]
             else:
-                print("更换代理中间件：")
-                print(len(ips[num]))
+                print("ip格式错误")
         except BaseException as e:
             print("更换代理exception：：")
             print(e)
             pass
         else:
             request.meta['proxy'] = str(ress)
-            print(ress)
             count += 1

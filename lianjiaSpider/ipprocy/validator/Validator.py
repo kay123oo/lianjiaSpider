@@ -162,7 +162,6 @@ def _checkHttpProxy(selfip, proxies, isHttp=True):
 
 def baidu_check(selfip, proxies):
     '''
-    用来检测代理的类型，突然发现，免费网站写的信息不靠谱，还是要自己检测代理的类型
     :param
     :return:
     '''
@@ -210,14 +209,3 @@ def getMyIP():
     except Exception as e:
         raise Test_URL_Fail
 
-
-if __name__ == '__main__':
-    ip = '222.186.161.132'
-    port = 3128
-    proxies = {"http": "http://%s:%s" % (ip, port), "https": "http://%s:%s" % (ip, port)}
-    _checkHttpProxy(None,proxies)
-    # getMyIP()
-    # str="{ip:'61.150.43.121',address:'陕西省西安市 西安电子科技大学'}"
-    # j = json.dumps(str)
-    # str = j['ip']
-    # print str

@@ -112,7 +112,7 @@ SCHEDULER_PERSIST = True
 #REDIS_HOST = '127.0.0.1'
 #REDIS_PORT = 6379
 #REDIS_DB = 1
-REDIS_URL = 'redis://127.0.0.1:6379/2'
+REDIS_URL = 'redis://127.0.0.1:6379/5'
 
 DEFAULT_REQUEST_HEADERS = {
     'Connection': 'keep-alive',
@@ -132,7 +132,7 @@ DEFAULT_REQUEST_HEADERS = {
 MONGODB_HOST = '127.0.0.1' # 默认主机IP
 MONGODB_PORT = 27017       # 默认端口号
 MONGODB_DBNAME = 'lianjia' # 数据库名
-MONGODB_DOCNAME = 'Test4'   # 表名
+MONGODB_DOCNAME = 'zufang'   # 表名
 
 
 """ 重试请求次数 """

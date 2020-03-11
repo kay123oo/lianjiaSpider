@@ -40,4 +40,9 @@ class zufangItem(Item):
     distance = Field()
     # 楼层
     floor = Field()
+    # 缩略图链接
+    img = Field()
+    # 详情页链接
+    detail_url = Field()
+
 
