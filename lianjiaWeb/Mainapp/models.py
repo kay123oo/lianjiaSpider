@@ -5,7 +5,7 @@ from mongoengine import *
 from mongoengine import connect
 connect('lianjia')      # 连接的数据库名称
 
-class zufang_sh(Document):
+class zufang(Document):
     _id = StringField()
     dataDistributionType = IntField(verbose_name='租房类型')
     district = StringField(verbose_name='区县')
@@ -25,6 +25,9 @@ class zufang_sh(Document):
     bedroom_num = IntField(verbose_name='几室')
     latitude = StringField(verbose_name='纬度')
     longitude = StringField(verbose_name='经度')
+    img = URLField(verbose_name='图片链接')
+    detail_url = URLField(verbose_name='详情页')
+
 
     def __str__(self):
         return self.title
@@ -32,7 +35,3 @@ class zufang_sh(Document):
     class Meta:
         db_table = 'zufang_sh'
         verbose_name = '上海租房信息集合'
-
-
-res = zufang_sh.objects(community='新宜小区').order_by("price")
-print(res)
