@@ -16,11 +16,16 @@ def pinyin(word):
 def addstr(arg1, arg2):
     return str(arg1) + str(arg2)
 
+
 @register.simple_tag
-def deletestr(arg1, arg2):
-    print(1111)
-    print(arg1)
-    print(arg2)
-    print(re.sub(arg2,'',arg1))
-    print(111)
-    return re.sub(arg2,'',arg1)
+def deletestr(arg1, arg2,arg3=None):
+    res = re.sub(arg2,'',arg1)
+    if arg3:
+        res = re.sub(arg3,'',res)
+    return res
+
+
+@register.simple_tag
+def delete_and_add(conditons,addstr,deletestr):
+    res = re.sub(deletestr, '', conditons)
+    return str(res)+str(addstr)

@@ -28,7 +28,6 @@ class zufang(Document):
     img = URLField(verbose_name='图片链接')
     detail_url = URLField(verbose_name='详情页')
 
-
     def __str__(self):
         return self.title
 

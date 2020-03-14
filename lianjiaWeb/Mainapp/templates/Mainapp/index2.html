@@ -17,8 +17,7 @@
     <!-- <link rel="stylesheet" href="../../static/Mainapp/css/lianjia.css">-->
     <meta charset="utf-8"> <!-- 设置文档字符编码 -->
     <!-- 隐藏发送请求时请求头表示来源的referrer字段。 -->
-
-  <meta name="referrer" content="no-referrer" />
+    <meta name="referrer" content="no-referrer" />
     <style type="text/css"> .filter__item--level2:active{font-weight: bold}</style>
     <style type="text/css"> .content__pg{width: 980px;text-align:right;margin-bottom: 5em; }</style>
 </head>
@@ -84,14 +83,17 @@
     
           <ul class="filter__ul" data-el="rentType">
           <li class="filter__item--level4 filter__item--aside"><a href="javascript:;">方式</a></li>
-                  <li data-id="0" class="filter__item--level4 strong">
+                  <li data-id="0" class="filter__item--level4 {% if 'rt0' or 'rt1' or 'rt2' not in current_conditions %}strong{% endif %}">
             <a href="" rel="nofollow" >不限</a>
           </li>
-                  <li data-id="200600000001" class="filter__item--level4 ">
-            <a href=""  >整租</a>
+                  <li data-id="200600000001" class="filter__item--level4 {% if 'rt0' in current_conditions %}strong{% endif %}">
+            <a href="/{{current_city.abbr}}/{% if current_district.en  %}{{current_district.en}}/{% endif %}{% if current_microdistrict  %}{% pinyin current_microdistrict %}/{% endif %}{% if 'rt0' in current_conditions %}{% deletestr current_conditions 'rt0' %}{% else %}{% addstr current_conditions 'rt0' %}{% endif %}"  >整租</a>
           </li>
-                  <li data-id="200600000002" class="filter__item--level4 ">
-            <a href=""  >合租</a>
+                  <li data-id="200600000002" class="filter__item--level4 {% if 'rt1' in current_conditions %}strong{% endif %}">
+            <a href="/{{current_city.abbr}}/{% if current_district.en  %}{{current_district.en}}/{% endif %}{% if current_microdistrict  %}{% pinyin current_microdistrict %}/{% endif %}{% if 'rt1' in current_conditions %}{% deletestr current_conditions 'rt1' %}{% else %}{% addstr current_conditions 'rt1' %}{% endif %}"  >合租</a>
+          </li>
+               <li data-id="200600000002" class="filter__item--level4 {% if 'rt2' in current_conditions %}strong{% endif %}">
+            <a href="/{{current_city.abbr}}/{% if current_district.en  %}{{current_district.en}}/{% endif %}{% if current_microdistrict  %}{% pinyin current_microdistrict %}/{% endif %}{% if 'rt2' in current_conditions %}{% deletestr current_conditions 'rt2' %}{% else %}{% addstr current_conditions 'rt2' %}{% endif %}"  >公寓</a>
           </li>
               </ul>
     
@@ -162,24 +164,33 @@
     
           <ul class="filter__ul">
           <li class="filter__item--level5 filter__item--aside"><a>楼层</a></li>
-                  <li class="filter__item--level5 check ">
-            <a rel="nofollow" href="/zufang/lc200500000003/">低楼层</a>
+                  <li class="filter__item--level5 check {% if 'lc0' in current_conditions %}checked{% endif %}">
+            <a rel="nofollow" href="/{{current_city.abbr}}/{% if current_district.en  %}{{current_district.en}}/{% endif %}{% if current_microdistrict %}{% pinyin current_microdistrict %}/{% endif %}{% if 'lc0' in current_conditions %}{% deletestr current_conditions 'lc0' %}{% else %}{% addstr current_conditions 'lc0' %}{% endif %}">低楼层</a>
           </li>
-                  <li class="filter__item--level5 check ">
-            <a rel="nofollow" href="/zufang/lc200500000002/">中楼层</a>
+                  <li class="filter__item--level5 check {% if 'lc1' in current_conditions %}checked{% endif %}">
+            <a rel="nofollow" href="/{{current_city.abbr}}/{% if current_district.en  %}{{current_district.en}}/{% endif %}{% if current_microdistrict %}{% pinyin current_microdistrict %}/{% endif %}{% if 'lc1' in current_conditions %}{% deletestr current_conditions 'lc1' %}{% else %}{% addstr current_conditions 'lc1' %}{% endif %}">中楼层</a>
           </li>
-                  <li class="filter__item--level5 check ">
-            <a rel="nofollow" href="/zufang/lc200500000001/">高楼层</a>
+                  <li class="filter__item--level5 check {% if 'lc2' in current_conditions %}checked{% endif %}">
+            <a rel="nofollow" href="/{{current_city.abbr}}/{% if current_district.en  %}{{current_district.en}}/{% endif %}{% if current_microdistrict %}{% pinyin current_microdistrict %}/{% endif %}{% if 'lc2' in current_conditions %}{% deletestr current_conditions 'lc2' %}{% else %}{% addstr current_conditions 'lc2' %}{% endif %}">高楼层</a>
           </li>
               </ul>
     
           <ul class="filter__ul">
-          <li class="filter__item--level5 filter__item--aside"><a">电梯</a></li>
-                  <li class="filter__item--level5 check ">
-            <a rel="nofollow" href="/zufang/ie0/">无电梯</a>
+          <li class="filter__item--level5 filter__item--aside"><a>特色</a></li>
+                  <li class="filter__item--level5 check {% if 'tg0' in current_conditions %}checked{% endif %}">
+            <a rel="nofollow" href="/{{current_city.abbr}}/{% if current_district.en  %}{{current_district.en}}/{% endif %}{% if current_microdistrict %}{% pinyin current_microdistrict %}/{% endif %}{% if 'tg0' in current_conditions %}{% deletestr current_conditions 'tg0' %}{% else %}{% addstr current_conditions 'tg0' %}{% endif %}">近地铁</a>
           </li>
-                  <li class="filter__item--level5 check ">
-            <a rel="nofollow" href="/zufang/ie1/">有电梯</a>
+                <li class="filter__item--level5 check {% if 'tg1' in current_conditions %}checked{% endif %}">
+            <a rel="nofollow" href="/{{current_city.abbr}}/{% if current_district.en  %}{{current_district.en}}/{% endif %}{% if current_microdistrict %}{% pinyin current_microdistrict %}/{% endif %}{% if 'tg1' in current_conditions %}{% deletestr current_conditions 'tg1' %}{% else %}{% addstr current_conditions 'tg1' %}{% endif %}">精装</a>
+          </li>
+              <li class="filter__item--level5 check {% if 'tg2' in current_conditions %}checked{% endif %}">
+            <a rel="nofollow" href="/{{current_city.abbr}}/{% if current_district.en  %}{{current_district.en}}/{% endif %}{% if current_microdistrict %}{% pinyin current_microdistrict %}/{% endif %}{% if 'tg2' in current_conditions %}{% deletestr current_conditions 'tg2' %}{% else %}{% addstr current_conditions 'tg2' %}{% endif %}">集中供暖</a>
+          </li>
+              <li class="filter__item--level5 check {% if 'tg3' in current_conditions %}checked{% endif %}">
+            <a rel="nofollow" href="/{{current_city.abbr}}/{% if current_district.en  %}{{current_district.en}}/{% endif %}{% if current_microdistrict %}{% pinyin current_microdistrict %}/{% endif %}{% if 'tg3' in current_conditions %}{% deletestr current_conditions 'tg3' %}{% else %}{% addstr current_conditions 'tg3' %}{% endif %}">双卫生间</a>
+          </li>
+              <li class="filter__item--level5 check {% if 'tg4' in current_conditions %}checked{% endif %}">
+            <a rel="nofollow" href="/{{current_city.abbr}}/{% if current_district.en  %}{{current_district.en}}/{% endif %}{% if current_microdistrict %}{% pinyin current_microdistrict %}/{% endif %}{% if 'tg4' in current_conditions %}{% deletestr current_conditions 'tg4' %}{% else %}{% addstr current_conditions 'tg4' %}{% endif %}">随时看房</a>
           </li>
               </ul>
       </div>
@@ -196,23 +207,22 @@
           {% if current_district.zh %}{{current_district.zh}}{% endif %}
           {% if current_microdistrict %}{{current_microdistrict}}{% endif %}
           租房</a>
-    <span class="content__title--aside"><a href="/zufang/" id="clearUrl">清空条件</a></span>
+    <span class="content__title--aside"><a href="/{{current_city.abbr}}/{% if current_district.en  %}{{current_district.en}}/{% endif %}{% if current_microdistrict %}{% pinyin current_microdistrict %}{% endif %}/" id="clearUrl">清空条件</a></span>
 </p>
 
       <!-- 搜索结果排序模块 -->
       <ul class="content__filter" id="contentList">
-            <li data-event_id="10800" data-event_action="search_condition=/zufang/" class='content__filter--selected'>
-        <a href="/zufang/" 
+            <li data-event_id="10800" data-event_action="search_condition=/zufang/" class="{% if current_conditions %}{% if 'so0' not in current_conditions %}{% if 'so1' not in current_conditions %}content__filter--selected{% endif %}{% endif %}{% else %}}content__filter--selected{% endif %}">
+        <a href="/{{current_city.abbr}}/{% if current_district.en  %}{{current_district.en}}/{% endif %}{% if current_microdistrict %}{% pinyin current_microdistrict %}/{% endif %}/{% if  current_conditions %}{% deletestr current_conditions 'so0' 'so1' %}{% endif %}"
            data-event_id="10797" 
            data-event_action="target=综合排序"
            data-event_position="target">默认排序</a>
       </li>
-
                                                               <li data-event_id="10800" 
           data-event_action="search_condition=/zufang/rco21/" 
-          class=' '>
+          class="{% if 'so0' in current_conditions %}content__filter--selected content__filter-up{% endif %}">
 
-                  <a href="{% url 'sort_by_price' district=current_district,biz}"
+                  <a href="/{{current_city.abbr}}/{% if current_district.en  %}{{current_district.en}}/{% endif %}{% if current_microdistrict %}{% pinyin current_microdistrict %}/{% endif %}{% if current_conditions %}{% if 'so1' in current_conditions %}{% delete_and_add current_conditions 'so0' 'so1' %}{% elif 'so0'  in current_conditions %}{{current_conditions}}{% else %}so0{% endif %}{% else %}so0{% endif %}"
              data-event_id="10797" 
              data-event_action="target=价格"
              data-event_position="target"
@@ -220,9 +230,9 @@
               </li>
                                                               <li data-event_id="10800" 
           data-event_action="search_condition=/zufang/rco31/" 
-          class=' '>
+          class="{% if 'so1' in current_conditions %}content__filter--selected content__filter-up{% endif %}">
 
-                  <a href="/zufang/rco31/" 
+                  <a href="/{{current_city.abbr}}/{% if current_district.en  %}{{current_district.en}}/{% endif %}{% if current_microdistrict %}{% pinyin current_microdistrict %}/{% endif %}{% if current_conditions %}{% if 'so0' in current_conditions %}{% delete_and_add current_conditions 'so1' 'so0' %}{% elif 'so1'  in current_conditions %}{{current_conditions}}{% else %}so1{% endif %}{% else %}so1{% endif %}"
              data-event_id="10797" 
              data-event_action="target=面积"
              data-event_position="target"
