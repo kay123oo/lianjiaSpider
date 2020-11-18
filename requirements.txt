@@ -59,7 +59,7 @@ mongoengine==0.19.1
 more-itertools==8.2.0
 nbconvert==5.6.1
 nbformat==5.0.4
-notebook==6.0.3
+notebook==6.1.5
 numpy==1.18.1
 orderedmultidict==1.0.1
 pandas==1.0.1
